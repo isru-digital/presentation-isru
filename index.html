@@ -1,0 +1,384 @@
+<title>ISRU - תמחור אתרי קולנוע דיגיטלי</title>
+<style>
+  :root{
+    --bg:#14100b;
+    --bg-raised:#1c160f;
+    --bg-card:#211a12;
+    --gold:#c9a24b;
+    --gold-soft:#e6cd8e;
+    --cream:#f3ecdd;
+    --bronze:#9c8567;
+    --hairline:rgba(201,162,75,0.22);
+    --font-display:"Frank Ruhl Libre","David Libre",Georgia,"Times New Roman",serif;
+    --font-body:"Assistant","Segoe UI","Arial Hebrew",Arial,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--cream);
+    font-family:var(--font-body);
+    direction:rtl;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  .progress{
+    position:fixed;top:0;right:0;left:0;height:3px;
+    background:transparent;z-index:50;
+  }
+  .progress__fill{
+    height:100%;width:0%;
+    background:linear-gradient(90deg,var(--gold-soft),var(--gold));
+    transition:width .08s linear;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:0 28px;}
+  section{padding:96px 0;}
+  @media (max-width:640px){ section{padding:64px 0;} }
+
+  .hero{
+    padding:120px 0 90px;
+    text-align:center;
+    background:
+      radial-gradient(ellipse at 50% -10%, rgba(201,162,75,0.16), transparent 60%),
+      var(--bg);
+    border-bottom:1px solid var(--hairline);
+  }
+  .hero__eyebrow{
+    font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--gold);margin:0 0 22px;
+  }
+  .hero h1{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:clamp(2.3rem,5.5vw,3.6rem);
+    margin:0 0 20px;
+    color:var(--cream);
+    text-wrap:balance;
+    letter-spacing:.01em;
+  }
+  .hero p.lead{
+    font-size:1.15rem;color:var(--bronze);max-width:560px;margin:0 auto;
+    text-wrap:balance;
+  }
+  .hero__rule{
+    width:64px;height:1px;background:var(--gold);margin:34px auto 0;opacity:.6;
+  }
+
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.in-view{opacity:1;transform:translateY(0);}
+  @media (prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none;}
+  }
+
+  .kicker{
+    font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--gold);margin:0 0 14px;
+  }
+  h2{
+    font-family:var(--font-display);font-weight:600;
+    font-size:clamp(1.6rem,3vw,2.1rem);margin:0 0 18px;color:var(--cream);
+    text-wrap:balance;
+  }
+  .lede{color:var(--bronze);font-size:1.02rem;max-width:640px;margin:0 0 40px;}
+
+  /* explain metaphor cards */
+  .explain{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+  @media (max-width:680px){ .explain{grid-template-columns:1fr;} }
+  .explain__card{
+    background:var(--bg-card);
+    border:1px solid var(--hairline);
+    border-radius:2px;
+    padding:30px 28px;
+  }
+  .explain__card h3{
+    font-family:var(--font-display);font-weight:600;font-size:1.15rem;
+    margin:0 0 12px;color:var(--gold-soft);
+  }
+  .explain__card p{margin:0;color:var(--cream);font-size:.98rem;opacity:.9;}
+  .explain__card.old{opacity:.75;}
+
+  /* comparison strip */
+  .compare{
+    border-top:1px solid var(--hairline);
+    border-bottom:1px solid var(--hairline);
+  }
+  table.compare-table{width:100%;border-collapse:collapse;font-size:.96rem;}
+  table.compare-table th{
+    text-align:right;font-family:var(--font-display);font-weight:600;
+    color:var(--gold-soft);padding:14px 10px;font-size:1.02rem;
+  }
+  table.compare-table td{
+    padding:16px 10px;border-top:1px solid var(--hairline);color:var(--cream);
+    vertical-align:top;
+  }
+  table.compare-table td:first-child{color:var(--bronze);width:32%;}
+  .tag-no{color:var(--bronze);}
+  .tag-yes{color:var(--gold-soft);}
+
+  /* pricing */
+  .tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  @media (max-width:860px){ .tiers{grid-template-columns:1fr;} }
+  .tier{
+    background:var(--bg-card);
+    border:1px solid var(--hairline);
+    padding:32px 26px;position:relative;
+    display:flex;flex-direction:column;
+  }
+  .tier--featured{
+    border-color:var(--gold);
+    box-shadow:0 0 0 1px var(--gold), 0 24px 60px -30px rgba(201,162,75,.5);
+  }
+  .tier__badge{
+    position:absolute;top:-13px;right:26px;
+    background:var(--gold);color:#1c1610;
+    font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
+    padding:5px 12px;font-weight:700;
+  }
+  .tier__name{font-family:var(--font-display);font-size:1.3rem;font-weight:600;margin:6px 0 6px;color:var(--cream);}
+  .tier__for{color:var(--bronze);font-size:.88rem;margin:0 0 20px;min-height:44px;}
+  .tier__price{
+    font-family:var(--font-display);color:var(--gold-soft);
+    font-size:1.65rem;font-variant-numeric:tabular-nums;margin:0 0 4px;
+  }
+  .tier__price small{font-family:var(--font-body);font-size:.62rem;color:var(--bronze);display:block;letter-spacing:.1em;text-transform:uppercase;margin-top:4px;}
+  .tier hr{border:none;border-top:1px solid var(--hairline);margin:20px 0;}
+  .tier ul{list-style:none;margin:0;padding:0;flex:1;}
+  .tier li{
+    font-size:.92rem;color:var(--cream);opacity:.92;
+    padding-right:20px;position:relative;margin-bottom:12px;
+  }
+  .tier li::before{
+    content:"-";position:absolute;right:0;color:var(--gold);
+  }
+
+  .addons{
+    display:flex;flex-wrap:wrap;gap:12px;margin-top:36px;
+  }
+  .addon{
+    border:1px solid var(--hairline);padding:10px 16px;font-size:.86rem;
+    color:var(--bronze);white-space:nowrap;
+  }
+  .addon b{color:var(--cream);font-weight:600;}
+
+  /* portfolio */
+  .portfolio{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  @media (max-width:680px){ .portfolio{grid-template-columns:1fr;} }
+  .port{
+    border:1px solid var(--hairline);padding:22px 20px;
+  }
+  .port__name{font-family:var(--font-display);font-size:1.05rem;color:var(--gold-soft);margin:0 0 6px;}
+  .port__desc{font-size:.88rem;color:var(--bronze);margin:0 0 12px;}
+  .port a{color:var(--gold);font-size:.82rem;text-decoration:none;border-bottom:1px solid var(--hairline);}
+  .port a:hover{border-color:var(--gold);}
+
+  /* faq */
+  .faq-item{border-top:1px solid var(--hairline);padding:22px 0;}
+  .faq-item:last-child{border-bottom:1px solid var(--hairline);}
+  .faq-q{font-family:var(--font-display);font-size:1.05rem;color:var(--cream);margin:0 0 8px;font-weight:600;}
+  .faq-a{color:var(--bronze);font-size:.94rem;margin:0;max-width:680px;}
+
+  footer{
+    text-align:center;padding:70px 0 90px;
+  }
+  footer .mark{font-family:var(--font-display);font-size:1.4rem;color:var(--gold-soft);margin:0 0 10px;}
+  footer .contact{color:var(--bronze);font-size:.92rem;}
+  footer .contact a{color:var(--gold);text-decoration:none;}
+  footer .fine{margin-top:26px;color:var(--bronze);opacity:.6;font-size:.78rem;}
+
+  ::selection{background:var(--gold);color:#1c1610;}
+</style>
+
+<div class="progress"><div class="progress__fill" id="progressFill"></div></div>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="hero__eyebrow">ISRU · הפקות דיגיטל</p>
+    <h1>אתר שהוא לא אתר.<br>הוא סרט שגוללים בו.</h1>
+    <p class="lead">מדריך תמחור פשוט - למי שלא בהכרח מבין באתרים, אבל רוצה להבין בדיוק על מה משלמים.</p>
+    <div class="hero__rule"></div>
+  </div>
+</header>
+
+<section class="explain-section">
+  <div class="wrap">
+    <p class="kicker reveal">קודם כל - מה זה בכלל</p>
+    <h2 class="reveal">תדמיינו שהגלילה בעכבר היא שלט של סרט</h2>
+    <p class="lede reveal">באתר רגיל, גוללים בין תמונות סטטיות. באתר שאנחנו בונים, כל האתר הוא סרטון אחד רציף שצולם/הופק במיוחד עבור העסק שלכם - וכשגוללים למטה, הסרט "מתקדם" בדיוק לפי קצב הגלילה. זה מרגיש כמו לצפות בסרט קולנוע שהעסק שלכם הוא הכוכב שלו.</p>
+    <div class="explain reveal">
+      <div class="explain__card old">
+        <h3>אתר רגיל</h3>
+        <p>כמה תמונות, קצת טקסט, אולי סרטון ברקע. נחמד, אבל נראה כמו אלף אתרים אחרים. הלקוח גולל, קורא, יוצא.</p>
+      </div>
+      <div class="explain__card">
+        <h3>אתר קולנועי</h3>
+        <p>סרטון AI ייחודי שמספר את הסיפור של העסק - כניסה לבית יוקרה, החלפת חליפה, פתיחת קופסת תכשיט - והגלילה שולטת בקצב הסיפור. הלקוח לא "קורא אתר", הוא חווה סצנה.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="compare">
+  <div class="wrap">
+    <p class="kicker reveal">ההבדל בקצרה</p>
+    <table class="compare-table reveal">
+      <tr><th></th><th>אתר רגיל</th><th>אתר קולנועי (מה שאנחנו בונים)</th></tr>
+      <tr><td>מה רואים</td><td>תמונות ובאנרים</td><td class="tag-yes">סרט AI רציף שמספר סיפור</td></tr>
+      <tr><td>איך גוללים</td><td>גלילה רגילה בין בלוקים</td><td class="tag-yes">הגלילה "מפעילה" את הסרט, סצנה אחר סצנה</td></tr>
+      <tr><td>תחושת המותג</td><td class="tag-no">עוד אתר</td><td class="tag-yes">חוויה שזוכרים ומשתפים</td></tr>
+      <tr><td>כמה זמן לוקח לבנות</td><td>ימים עד שבועות</td><td>כמה ימי עבודה</td></tr>
+      <tr><td>למי זה מתאים</td><td>כל עסק</td><td class="tag-yes">מותגים שרוצים להרשים - נדל"ן יוקרה, תכשיטים, אופנה, מוצרי פרימיום</td></tr>
+    </table>
+  </div>
+</section>
+
+<section class="pricing-section">
+  <div class="wrap">
+    <p class="kicker reveal">התמחור</p>
+    <h2 class="reveal">שלוש רמות, לפי כמה "סרט" רוצים</h2>
+    <p class="lede reveal">המחיר לא נגזר מ"כמה זמן זה לוקח" - הוא נגזר מהיקף הסיפור, כמה סצנות יש בו, וכמה יכולות מיוחדות נוספות לאתר.</p>
+
+    <div class="tiers reveal">
+      <div class="tier">
+        <p class="tier__name">כניסה לקולנוע</p>
+        <p class="tier__for">מתאים למי שרוצה רושם ראשוני חזק, בלי הפקה מורכבת. סצנה אחת, סיפור קצר וממוקד.</p>
+        <p class="tier__price">5,000 - 7,500 ₪</p>
+        <hr>
+        <ul>
+          <li>סרט AI אחד, כ-15-20 שניות</li>
+          <li>3-4 כיתובים שמתחלפים תוך כדי גלילה</li>
+          <li>מותאם למחשב ולנייד</li>
+          <li>עיצוב מותאם לצבעי המותג</li>
+        </ul>
+      </div>
+
+      <div class="tier tier--featured">
+        <span class="tier__badge">הבחירה הנפוצה</span>
+        <p class="tier__name">הסרט המלא</p>
+        <p class="tier__for">כמו האתרים שכבר בנינו לתחומי נדל"ן ותכשיטים - סיפור שלם עם כמה סצנות ואלמנט אינטראקטיבי.</p>
+        <p class="tier__price">9,000 - 15,000 ₪</p>
+        <hr>
+        <ul>
+          <li>סרט AI רציף, 30-45 שניות, כמה סצנות מחוברות</li>
+          <li>גרסה נפרדת ומותאמת אישית למובייל</li>
+          <li>אלמנט אינטראקטיבי אחד (למשל: "היכנסו" לחדר, או "החליפו" חומר/צבע במוצר)</li>
+          <li>כל הכיתובים והמיתוג בעברית, מסודר מימין לשמאל</li>
+          <li>סבב תיקונים אחד כלול</li>
+        </ul>
+      </div>
+
+      <div class="tier">
+        <p class="tier__name">הפקה מלאה</p>
+        <p class="tier__for">כשרוצים כמה "חדרים"/מוצרים באותו אתר, וגם סרטון שיווקי נפרד לרשתות החברתיות.</p>
+        <p class="tier__price">16,000 - 28,000 ₪</p>
+        <hr>
+        <ul>
+          <li>כל מה שבחבילה האמצעית</li>
+          <li>כמה סצנות/חדרים/וריאציות באותו אתר</li>
+          <li>סרטון דמו שיווקי נפרד, מוכן להעלאה לרשתות</li>
+          <li>חיבור למערכת ניהול, כדי שתוכלו לעדכן תוכן בעצמכם</li>
+          <li>ליווי צמוד עד לעלייה לאוויר</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="addons reveal">
+      <span class="addon"><b>+1,500-2,500 ₪</b> סצנה/חדר נוסף</span>
+      <span class="addon"><b>+2,000-3,500 ₪</b> סרטון שיווקי נפרד לרשתות</span>
+      <span class="addon"><b>500-1,000 ₪/חודש</b> ריטיינר עדכונים ותחזוקה</span>
+    </div>
+  </div>
+</section>
+
+<section class="portfolio-section">
+  <div class="wrap">
+    <p class="kicker reveal">כדי שלא תצטרכו לדמיין</p>
+    <h2 class="reveal">שלוש דוגמאות חיות</h2>
+    <p class="lede reveal">אלו לא הדמיות. אפשר לפתוח אותן עכשיו בטלפון ולגלול.</p>
+    <div class="portfolio reveal">
+      <div class="port">
+        <p class="port__name">MAISON - נכסי יוקרה</p>
+        <p class="port__desc">סיור וילה קולנועי, ומעבר "כמו במשחק" בין נכסים.</p>
+        <a href="https://isru-digital.github.io/" target="_blank" rel="noopener">isru-digital.github.io</a>
+      </div>
+      <div class="port">
+        <p class="port__name">הילה HALO</p>
+        <p class="port__desc">תכשיטי יוקרה, עם אפשרות "להחליף" זהב בלייב על אותה טבעת.</p>
+        <a href="https://isru-digital.github.io/halo-jewelry/" target="_blank" rel="noopener">isru-digital.github.io/halo-jewelry</a>
+      </div>
+      <div class="port">
+        <p class="port__name">OPTIKA FOCUS</p>
+        <p class="port__desc">אתר דמו לאופטיקה, עם אפקט מעבר מטושטש לחד תוך כדי גלילה.</p>
+        <a href="https://isru-digital.github.io/focus-optika/" target="_blank" rel="noopener">isru-digital.github.io/focus-optika</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="faq-section">
+  <div class="wrap">
+    <p class="kicker reveal">שאלות שכל לקוח שואל</p>
+    <h2 class="reveal">בלי טכני, בפשטות</h2>
+
+    <div class="faq reveal">
+      <div class="faq-item">
+        <p class="faq-q">אני צריך לצלם משהו בעצמי?</p>
+        <p class="faq-a">לא. הסרט מופק כולו בבינה מלאכותית לפי סגנון, מותג וצבעים שנקבע יחד. אם יש תמונות מוצר אמיתיות שתרצו לשלב, אפשר בהחלט.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">כמה זמן זה לוקח מרגע שסיכמנו?</p>
+        <p class="faq-a">בחבילה האמצעית - בדרך כלל כמה ימי עבודה, לא שבועות. זה אחד היתרונות הגדולים מול הפקת סרטון קלאסית.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">זה עובד טוב בנייד?</p>
+        <p class="faq-a">כן, ומכוון. בונים גרסה נפרדת שמותאמת לפרופורציות של מסך טלפון, לא רק מקטינים את גרסת המחשב.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">מה אם אני רוצה לשנות משהו אחרי שהאתר עלה?</p>
+        <p class="faq-a">סבב תיקונים אחד כלול במחיר. מעבר לכך, או לעדכונים שוטפים בהמשך, יש אפשרות לריטיינר חודשי קטן.</p>
+      </div>
+      <div class="faq-item">
+        <p class="faq-q">למה זה יקר יותר מאתר רגיל בוויקס?</p>
+        <p class="faq-a">כי זו לא רק בניית אתר - זו גם הפקת סרט מותאם אישית שאף מותג מתחרה לא ישתמש בו. זה משלב עבודה של סטודיו וידאו ועיצוב אתרים באותו מחיר.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p class="mark">ISRU</p>
+    <p class="contact">052-744-4984 &nbsp;·&nbsp; <a href="mailto:info@isru.co.il">info@isru.co.il</a></p>
+    <p class="fine">המחירים הם טווח מוצע, מותאמים סופית להיקף ולדרישות של כל פרויקט</p>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var fill = document.getElementById('progressFill');
+    function onScroll(){
+      var h = document.documentElement;
+      var scrolled = h.scrollTop;
+      var max = h.scrollHeight - h.clientHeight;
+      var pct = max > 0 ? (scrolled / max) * 100 : 0;
+      fill.style.width = pct + '%';
+    }
+    document.addEventListener('scroll', onScroll, {passive:true});
+    onScroll();
+
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var items = document.querySelectorAll('.reveal');
+    if (reduced || !('IntersectionObserver' in window)) {
+      items.forEach(function(el){ el.classList.add('in-view'); });
+    } else {
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            io.unobserve(entry.target);
+          }
+        });
+      }, {threshold: 0.15});
+      items.forEach(function(el){ io.observe(el); });
+    }
+  })();
+</script>

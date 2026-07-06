@@ -1,384 +1,298 @@
-<title>ISRU - תמחור אתרי קולנוע דיגיטלי</title>
-<style>
-  :root{
-    --bg:#14100b;
-    --bg-raised:#1c160f;
-    --bg-card:#211a12;
-    --gold:#c9a24b;
-    --gold-soft:#e6cd8e;
-    --cream:#f3ecdd;
-    --bronze:#9c8567;
-    --hairline:rgba(201,162,75,0.22);
-    --font-display:"Frank Ruhl Libre","David Libre",Georgia,"Times New Roman",serif;
-    --font-body:"Assistant","Segoe UI","Arial Hebrew",Arial,sans-serif;
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    background:var(--bg);
-    color:var(--cream);
-    font-family:var(--font-body);
-    direction:rtl;
-    line-height:1.7;
-    -webkit-font-smoothing:antialiased;
-  }
-  .progress{
-    position:fixed;top:0;right:0;left:0;height:3px;
-    background:transparent;z-index:50;
-  }
-  .progress__fill{
-    height:100%;width:0%;
-    background:linear-gradient(90deg,var(--gold-soft),var(--gold));
-    transition:width .08s linear;
-  }
-  .wrap{max-width:920px;margin:0 auto;padding:0 28px;}
-  section{padding:96px 0;}
-  @media (max-width:640px){ section{padding:64px 0;} }
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ISRU - אתר שהוא סרט. גללו ותראו.</title>
+  <meta name="description" content="ISRU בונה אתרי קולנוע דיגיטלי - סרט AI רציף שנשלט בגלילה. הדף הזה הוא בעצמו הדוגמה. גללו, תרגישו את ה-WOW, וראו את התמחור." />
+  <meta name="theme-color" content="#120e09" />
 
-  .hero{
-    padding:120px 0 90px;
-    text-align:center;
-    background:
-      radial-gradient(ellipse at 50% -10%, rgba(201,162,75,0.16), transparent 60%),
-      var(--bg);
-    border-bottom:1px solid var(--hairline);
-  }
-  .hero__eyebrow{
-    font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;
-    color:var(--gold);margin:0 0 22px;
-  }
-  .hero h1{
-    font-family:var(--font-display);
-    font-weight:600;
-    font-size:clamp(2.3rem,5.5vw,3.6rem);
-    margin:0 0 20px;
-    color:var(--cream);
-    text-wrap:balance;
-    letter-spacing:.01em;
-  }
-  .hero p.lead{
-    font-size:1.15rem;color:var(--bronze);max-width:560px;margin:0 auto;
-    text-wrap:balance;
-  }
-  .hero__rule{
-    width:64px;height:1px;background:var(--gold);margin:34px auto 0;opacity:.6;
-  }
+  <meta property="og:title" content="ISRU - אתר שהוא סרט" />
+  <meta property="og:description" content="גללו - אתם מפעילים את הסרט. אתרי קולנוע דיגיטלי לעסקים שרוצים WOW." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://isru-digital.github.io/presentation-isru/media/poster1.jpg" />
 
-  .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
-  .reveal.in-view{opacity:1;transform:translateY(0);}
-  @media (prefers-reduced-motion:reduce){
-    .reveal{opacity:1;transform:none;transition:none;}
-  }
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%23120e09'/%3E%3Ctext x='50' y='66' font-size='44' text-anchor='middle' fill='%23c9a24b' font-family='Georgia,serif'%3EIS%3C/text%3E%3C/svg%3E" />
 
-  .kicker{
-    font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;
-    color:var(--gold);margin:0 0 14px;
-  }
-  h2{
-    font-family:var(--font-display);font-weight:600;
-    font-size:clamp(1.6rem,3vw,2.1rem);margin:0 0 18px;color:var(--cream);
-    text-wrap:balance;
-  }
-  .lede{color:var(--bronze);font-size:1.02rem;max-width:640px;margin:0 0 40px;}
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700;900&family=Assistant:wght@300;400;600;700&display=swap" rel="stylesheet" />
 
-  /* explain metaphor cards */
-  .explain{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
-  @media (max-width:680px){ .explain{grid-template-columns:1fr;} }
-  .explain__card{
-    background:var(--bg-card);
-    border:1px solid var(--hairline);
-    border-radius:2px;
-    padding:30px 28px;
-  }
-  .explain__card h3{
-    font-family:var(--font-display);font-weight:600;font-size:1.15rem;
-    margin:0 0 12px;color:var(--gold-soft);
-  }
-  .explain__card p{margin:0;color:var(--cream);font-size:.98rem;opacity:.9;}
-  .explain__card.old{opacity:.75;}
+  <link rel="preload" as="image" href="media/poster1.jpg" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script>document.documentElement.classList.add("js");</script>
 
-  /* comparison strip */
-  .compare{
-    border-top:1px solid var(--hairline);
-    border-bottom:1px solid var(--hairline);
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "ISRU - בניית אתרי יוקרה",
+    "image": "https://isru-digital.github.io/presentation-isru/media/poster1.jpg",
+    "telephone": "+972-52-744-4984",
+    "email": "info@isru.co.il",
+    "url": "https://isru-digital.github.io/presentation-isru/",
+    "areaServed": "IL",
+    "priceRange": "₪₪₪"
   }
-  table.compare-table{width:100%;border-collapse:collapse;font-size:.96rem;}
-  table.compare-table th{
-    text-align:right;font-family:var(--font-display);font-weight:600;
-    color:var(--gold-soft);padding:14px 10px;font-size:1.02rem;
-  }
-  table.compare-table td{
-    padding:16px 10px;border-top:1px solid var(--hairline);color:var(--cream);
-    vertical-align:top;
-  }
-  table.compare-table td:first-child{color:var(--bronze);width:32%;}
-  .tag-no{color:var(--bronze);}
-  .tag-yes{color:var(--gold-soft);}
+  </script>
+</head>
+<body id="top">
 
-  /* pricing */
-  .tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
-  @media (max-width:860px){ .tiers{grid-template-columns:1fr;} }
-  .tier{
-    background:var(--bg-card);
-    border:1px solid var(--hairline);
-    padding:32px 26px;position:relative;
-    display:flex;flex-direction:column;
-  }
-  .tier--featured{
-    border-color:var(--gold);
-    box-shadow:0 0 0 1px var(--gold), 0 24px 60px -30px rgba(201,162,75,.5);
-  }
-  .tier__badge{
-    position:absolute;top:-13px;right:26px;
-    background:var(--gold);color:#1c1610;
-    font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
-    padding:5px 12px;font-weight:700;
-  }
-  .tier__name{font-family:var(--font-display);font-size:1.3rem;font-weight:600;margin:6px 0 6px;color:var(--cream);}
-  .tier__for{color:var(--bronze);font-size:.88rem;margin:0 0 20px;min-height:44px;}
-  .tier__price{
-    font-family:var(--font-display);color:var(--gold-soft);
-    font-size:1.65rem;font-variant-numeric:tabular-nums;margin:0 0 4px;
-  }
-  .tier__price small{font-family:var(--font-body);font-size:.62rem;color:var(--bronze);display:block;letter-spacing:.1em;text-transform:uppercase;margin-top:4px;}
-  .tier hr{border:none;border-top:1px solid var(--hairline);margin:20px 0;}
-  .tier ul{list-style:none;margin:0;padding:0;flex:1;}
-  .tier li{
-    font-size:.92rem;color:var(--cream);opacity:.92;
-    padding-right:20px;position:relative;margin-bottom:12px;
-  }
-  .tier li::before{
-    content:"-";position:absolute;right:0;color:var(--gold);
-  }
+  <a class="skip-link" href="#explain">דלגו לתוכן</a>
 
-  .addons{
-    display:flex;flex-wrap:wrap;gap:12px;margin-top:36px;
-  }
-  .addon{
-    border:1px solid var(--hairline);padding:10px 16px;font-size:.86rem;
-    color:var(--bronze);white-space:nowrap;
-  }
-  .addon b{color:var(--cream);font-weight:600;}
-
-  /* portfolio */
-  .portfolio{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
-  @media (max-width:680px){ .portfolio{grid-template-columns:1fr;} }
-  .port{
-    border:1px solid var(--hairline);padding:22px 20px;
-  }
-  .port__name{font-family:var(--font-display);font-size:1.05rem;color:var(--gold-soft);margin:0 0 6px;}
-  .port__desc{font-size:.88rem;color:var(--bronze);margin:0 0 12px;}
-  .port a{color:var(--gold);font-size:.82rem;text-decoration:none;border-bottom:1px solid var(--hairline);}
-  .port a:hover{border-color:var(--gold);}
-
-  /* faq */
-  .faq-item{border-top:1px solid var(--hairline);padding:22px 0;}
-  .faq-item:last-child{border-bottom:1px solid var(--hairline);}
-  .faq-q{font-family:var(--font-display);font-size:1.05rem;color:var(--cream);margin:0 0 8px;font-weight:600;}
-  .faq-a{color:var(--bronze);font-size:.94rem;margin:0;max-width:680px;}
-
-  footer{
-    text-align:center;padding:70px 0 90px;
-  }
-  footer .mark{font-family:var(--font-display);font-size:1.4rem;color:var(--gold-soft);margin:0 0 10px;}
-  footer .contact{color:var(--bronze);font-size:.92rem;}
-  footer .contact a{color:var(--gold);text-decoration:none;}
-  footer .fine{margin-top:26px;color:var(--bronze);opacity:.6;font-size:.78rem;}
-
-  ::selection{background:var(--gold);color:#1c1610;}
-</style>
-
-<div class="progress"><div class="progress__fill" id="progressFill"></div></div>
-
-<header class="hero">
-  <div class="wrap">
-    <p class="hero__eyebrow">ISRU · הפקות דיגיטל</p>
-    <h1>אתר שהוא לא אתר.<br>הוא סרט שגוללים בו.</h1>
-    <p class="lead">מדריך תמחור פשוט - למי שלא בהכרח מבין באתרים, אבל רוצה להבין בדיוק על מה משלמים.</p>
-    <div class="hero__rule"></div>
-  </div>
-</header>
-
-<section class="explain-section">
-  <div class="wrap">
-    <p class="kicker reveal">קודם כל - מה זה בכלל</p>
-    <h2 class="reveal">תדמיינו שהגלילה בעכבר היא שלט של סרט</h2>
-    <p class="lede reveal">באתר רגיל, גוללים בין תמונות סטטיות. באתר שאנחנו בונים, כל האתר הוא סרטון אחד רציף שצולם/הופק במיוחד עבור העסק שלכם - וכשגוללים למטה, הסרט "מתקדם" בדיוק לפי קצב הגלילה. זה מרגיש כמו לצפות בסרט קולנוע שהעסק שלכם הוא הכוכב שלו.</p>
-    <div class="explain reveal">
-      <div class="explain__card old">
-        <h3>אתר רגיל</h3>
-        <p>כמה תמונות, קצת טקסט, אולי סרטון ברקע. נחמד, אבל נראה כמו אלף אתרים אחרים. הלקוח גולל, קורא, יוצא.</p>
-      </div>
-      <div class="explain__card">
-        <h3>אתר קולנועי</h3>
-        <p>סרטון AI ייחודי שמספר את הסיפור של העסק - כניסה לבית יוקרה, החלפת חליפה, פתיחת קופסת תכשיט - והגלילה שולטת בקצב הסיפור. הלקוח לא "קורא אתר", הוא חווה סצנה.</p>
-      </div>
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader__inner">
+      <span class="loader__brand">ISRU</span>
+      <span class="loader__sub">הפקות דיגיטל</span>
+      <span class="loader__line"></span>
     </div>
   </div>
-</section>
 
-<section class="compare">
-  <div class="wrap">
-    <p class="kicker reveal">ההבדל בקצרה</p>
-    <table class="compare-table reveal">
-      <tr><th></th><th>אתר רגיל</th><th>אתר קולנועי (מה שאנחנו בונים)</th></tr>
-      <tr><td>מה רואים</td><td>תמונות ובאנרים</td><td class="tag-yes">סרט AI רציף שמספר סיפור</td></tr>
-      <tr><td>איך גוללים</td><td>גלילה רגילה בין בלוקים</td><td class="tag-yes">הגלילה "מפעילה" את הסרט, סצנה אחר סצנה</td></tr>
-      <tr><td>תחושת המותג</td><td class="tag-no">עוד אתר</td><td class="tag-yes">חוויה שזוכרים ומשתפים</td></tr>
-      <tr><td>כמה זמן לוקח לבנות</td><td>ימים עד שבועות</td><td>כמה ימי עבודה</td></tr>
-      <tr><td>למי זה מתאים</td><td>כל עסק</td><td class="tag-yes">מותגים שרוצים להרשים - נדל"ן יוקרה, תכשיטים, אופנה, מוצרי פרימיום</td></tr>
-    </table>
-  </div>
-</section>
+  <div class="progress" id="progress" aria-hidden="true"></div>
 
-<section class="pricing-section">
-  <div class="wrap">
-    <p class="kicker reveal">התמחור</p>
-    <h2 class="reveal">שלוש רמות, לפי כמה "סרט" רוצים</h2>
-    <p class="lede reveal">המחיר לא נגזר מ"כמה זמן זה לוקח" - הוא נגזר מהיקף הסיפור, כמה סצנות יש בו, וכמה יכולות מיוחדות נוספות לאתר.</p>
+  <header class="nav" id="nav">
+    <a class="nav__brand" href="#top">
+      <span class="nav__brand-main">ISRU</span>
+      <span class="nav__brand-sub">הפקות דיגיטל</span>
+    </a>
+    <nav class="nav__links" id="navLinks" aria-label="ניווט ראשי">
+      <a href="#explain" data-link>מה זה</a>
+      <a href="#pricing" data-link>תמחור</a>
+      <a href="#portfolio" data-link>דוגמאות חיות</a>
+      <a href="https://wa.me/972527444984?text=%D7%94%D7%99%D7%99%2C%20%D7%A8%D7%90%D7%99%D7%AA%D7%99%20%D7%90%D7%AA%20%D7%94%D7%90%D7%AA%D7%A8%20%D7%A9%D7%9C%D7%9B%D7%9D%20%D7%95%D7%90%D7%A0%D7%99%20%D7%A8%D7%95%D7%A6%D7%94%20%D7%90%D7%AA%D7%A8%20%D7%9B%D7%96%D7%94" class="btn btn--gold" target="_blank" rel="noopener">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        דברו איתי
+      </a>
+    </nav>
+    <button class="nav__toggle" id="navToggle" aria-label="תפריט" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
 
-    <div class="tiers reveal">
-      <div class="tier">
-        <p class="tier__name">כניסה לקולנוע</p>
-        <p class="tier__for">מתאים למי שרוצה רושם ראשוני חזק, בלי הפקה מורכבת. סצנה אחת, סיפור קצר וממוקד.</p>
-        <p class="tier__price">5,000 - 7,500 ₪</p>
-        <hr>
-        <ul>
-          <li>סרט AI אחד, כ-15-20 שניות</li>
-          <li>3-4 כיתובים שמתחלפים תוך כדי גלילה</li>
-          <li>מותאם למחשב ולנייד</li>
-          <li>עיצוב מותאם לצבעי המותג</li>
-        </ul>
+  <nav class="dots" id="dots" aria-label="ניווט סצנות">
+    <a href="#film" data-scene="0" aria-label="סצנה 1"></a>
+    <a href="#film" data-scene="1" aria-label="סצנה 2"></a>
+    <a href="#film" data-scene="2" aria-label="סצנה 3"></a>
+    <a href="#film" data-scene="3" aria-label="סצנה 4"></a>
+  </nav>
+
+  <main>
+
+    <!-- THE FILM -->
+    <section class="film" id="film">
+      <div class="film__stage">
+        <video class="film__video" id="filmVideo" muted playsinline preload="auto"
+               data-src="media/film.mp4" data-src-m="media/film_m.mp4"
+               poster="media/poster1.jpg"></video>
+        <div class="film__scrim"></div>
+
+        <div class="caps">
+          <!-- 1: the studio -->
+          <div class="cap cap--center is-active" data-scene="0">
+            <div class="cap__inner"><div class="cap__text">
+              <p class="eyebrow">ISRU · הפקות דיגיטל</p>
+              <h1 class="hero__title">אתר שהוא סרט</h1>
+              <p class="hero__tagline">הדף הזה הוא ההוכחה. גללו לאט - אתם אלה שמפעילים את הסרט.</p>
+              <a class="btn btn--gold btn--lg" href="#pricing" data-link>כמה זה עולה</a>
+            </div></div>
+          </div>
+          <!-- 2: through the screen -->
+          <div class="cap cap--right" data-scene="1">
+            <div class="cap__inner"><div class="cap__text">
+              <p class="eyebrow">הקסם</p>
+              <h2 class="scene__title">נכנסים אל תוך המסך</h2>
+              <p class="scene__body">אתר רגיל מציג תמונות. אנחנו לוקחים את הלקוח שלכם למסע - דרך המסך, אל תוך העולם של המותג.</p>
+            </div></div>
+          </div>
+          <!-- 3: the world inside -->
+          <div class="cap cap--left" data-scene="2">
+            <div class="cap__inner"><div class="cap__text">
+              <p class="eyebrow">העולם שאנחנו בונים</p>
+              <h2 class="scene__title">יוקרה בכל פיקסל</h2>
+              <p class="scene__body">נדל"ן, תכשיטים, אופנה, מסעדות - כל עסק מקבל סרט משלו, מופק בבינה מלאכותית, שאף מתחרה לא ישתמש בו.</p>
+            </div></div>
+          </div>
+          <!-- 4: the mark / CTA -->
+          <div class="cap cap--center cap--cta" data-scene="3">
+            <div class="cap__inner"><div class="cap__text">
+              <p class="eyebrow">עכשיו תדמיינו את זה על העסק שלכם</p>
+              <h2 class="scene__title scene__title--xl">בואו נבנה את שלכם</h2>
+              <div class="cta__actions">
+                <a class="btn btn--gold btn--lg" href="https://wa.me/972527444984?text=%D7%94%D7%99%D7%99%2C%20%D7%A8%D7%90%D7%99%D7%AA%D7%99%20%D7%90%D7%AA%20%D7%94%D7%90%D7%AA%D7%A8%20%D7%A9%D7%9C%D7%9B%D7%9D%20%D7%95%D7%90%D7%A0%D7%99%20%D7%A8%D7%95%D7%A6%D7%94%20%D7%90%D7%AA%D7%A8%20%D7%9B%D7%96%D7%94" target="_blank" rel="noopener">דברו איתי בוואטסאפ</a>
+                <a class="btn btn--ghost btn--lg" href="#pricing" data-link>לתמחור המלא</a>
+              </div>
+            </div></div>
+          </div>
+        </div>
+
+        <a class="scroll-cue" id="scrollCue" href="#explain" aria-label="גללו">
+          <span class="scroll-cue__label">גללו</span>
+          <span class="scroll-cue__line"></span>
+        </a>
+      </div>
+    </section>
+
+    <!-- EXPLAIN -->
+    <section class="explain" id="explain">
+      <div class="section-head">
+        <p class="eyebrow">מה בעצם ראיתם עכשיו</p>
+        <h2 class="section-title">הגלילה שלכם היא השלט של הסרט</h2>
+        <p class="section-sub">מה שחוויתם למעלה - סרט שנע קדימה ואחורה לפי הגלילה - זה בדיוק המוצר. הסבר פשוט, בלי מונחים טכניים.</p>
+      </div>
+      <div class="explain__grid">
+        <article class="xcard xcard--old reveal-item">
+          <h3>אתר רגיל</h3>
+          <p>כמה תמונות, קצת טקסט, אולי סרטון ברקע. נחמד, אבל נראה כמו אלף אתרים אחרים. הלקוח גולל, קורא, יוצא.</p>
+        </article>
+        <article class="xcard reveal-item">
+          <h3>אתר קולנועי</h3>
+          <p>סרט AI ייחודי שמספר את הסיפור של העסק - והגלילה שולטת בקצב. הלקוח לא "קורא אתר", הוא חווה סצנה. וזה מה שהוא זוכר.</p>
+        </article>
       </div>
 
-      <div class="tier tier--featured">
-        <span class="tier__badge">הבחירה הנפוצה</span>
-        <p class="tier__name">הסרט המלא</p>
-        <p class="tier__for">כמו האתרים שכבר בנינו לתחומי נדל"ן ותכשיטים - סיפור שלם עם כמה סצנות ואלמנט אינטראקטיבי.</p>
-        <p class="tier__price">9,000 - 15,000 ₪</p>
-        <hr>
-        <ul>
-          <li>סרט AI רציף, 30-45 שניות, כמה סצנות מחוברות</li>
-          <li>גרסה נפרדת ומותאמת אישית למובייל</li>
-          <li>אלמנט אינטראקטיבי אחד (למשל: "היכנסו" לחדר, או "החליפו" חומר/צבע במוצר)</li>
-          <li>כל הכיתובים והמיתוג בעברית, מסודר מימין לשמאל</li>
-          <li>סבב תיקונים אחד כלול</li>
-        </ul>
+      <div class="compare reveal-item">
+        <table class="compare__table">
+          <tr><th></th><th>אתר רגיל</th><th>אתר קולנועי</th></tr>
+          <tr><td>מה רואים</td><td>תמונות ובאנרים</td><td class="t-gold">סרט AI רציף שמספר סיפור</td></tr>
+          <tr><td>איך גוללים</td><td>גלילה רגילה בין בלוקים</td><td class="t-gold">הגלילה מפעילה את הסרט, סצנה אחר סצנה</td></tr>
+          <tr><td>תחושת המותג</td><td>עוד אתר</td><td class="t-gold">חוויה שזוכרים ומשתפים</td></tr>
+          <tr><td>זמן בנייה</td><td>ימים עד שבועות</td><td>כמה ימי עבודה</td></tr>
+          <tr><td>למי זה מתאים</td><td>כל עסק</td><td class="t-gold">מותגים שרוצים להרשים - נדל"ן, תכשיטים, אופנה, פרימיום</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="pricing" id="pricing">
+      <div class="section-head">
+        <p class="eyebrow">התמחור</p>
+        <h2 class="section-title">שלוש רמות, לפי כמה סרט רוצים</h2>
+        <p class="section-sub">המחיר לא נגזר מכמה זמן זה לוקח - אלא מהיקף הסיפור, כמה סצנות יש בו, ואילו יכולות נוספות לאתר.</p>
       </div>
 
-      <div class="tier">
-        <p class="tier__name">הפקה מלאה</p>
-        <p class="tier__for">כשרוצים כמה "חדרים"/מוצרים באותו אתר, וגם סרטון שיווקי נפרד לרשתות החברתיות.</p>
-        <p class="tier__price">16,000 - 28,000 ₪</p>
-        <hr>
-        <ul>
-          <li>כל מה שבחבילה האמצעית</li>
-          <li>כמה סצנות/חדרים/וריאציות באותו אתר</li>
-          <li>סרטון דמו שיווקי נפרד, מוכן להעלאה לרשתות</li>
-          <li>חיבור למערכת ניהול, כדי שתוכלו לעדכן תוכן בעצמכם</li>
-          <li>ליווי צמוד עד לעלייה לאוויר</li>
-        </ul>
-      </div>
-    </div>
+      <div class="tiers">
+        <article class="tier reveal-item">
+          <p class="tier__name">כניסה לקולנוע</p>
+          <p class="tier__for">רושם ראשוני חזק, בלי הפקה מורכבת. סצנה אחת, סיפור קצר וממוקד.</p>
+          <p class="tier__price">5,000 - 7,500 ₪</p>
+          <hr>
+          <ul>
+            <li>סרט AI אחד, כ-15-20 שניות</li>
+            <li>3-4 כיתובים שמתחלפים בגלילה</li>
+            <li>מותאם למחשב ולנייד</li>
+            <li>עיצוב בצבעי המותג</li>
+          </ul>
+        </article>
 
-    <div class="addons reveal">
-      <span class="addon"><b>+1,500-2,500 ₪</b> סצנה/חדר נוסף</span>
-      <span class="addon"><b>+2,000-3,500 ₪</b> סרטון שיווקי נפרד לרשתות</span>
-      <span class="addon"><b>500-1,000 ₪/חודש</b> ריטיינר עדכונים ותחזוקה</span>
-    </div>
-  </div>
-</section>
+        <article class="tier tier--featured reveal-item">
+          <span class="tier__badge">הבחירה הנפוצה</span>
+          <p class="tier__name">הסרט המלא</p>
+          <p class="tier__for">כמו הדף הזה בדיוק - סיפור שלם עם כמה סצנות ואלמנט אינטראקטיבי.</p>
+          <p class="tier__price">9,000 - 15,000 ₪</p>
+          <hr>
+          <ul>
+            <li>סרט AI רציף, 30-45 שניות, כמה סצנות מחוברות</li>
+            <li>גרסה נפרדת ומותאמת למובייל</li>
+            <li>אלמנט אינטראקטיבי (סיור בנכס, החלפת צבע מוצר)</li>
+            <li>עברית מלאה, מימין לשמאל</li>
+            <li>סבב תיקונים כלול</li>
+          </ul>
+        </article>
 
-<section class="portfolio-section">
-  <div class="wrap">
-    <p class="kicker reveal">כדי שלא תצטרכו לדמיין</p>
-    <h2 class="reveal">שלוש דוגמאות חיות</h2>
-    <p class="lede reveal">אלו לא הדמיות. אפשר לפתוח אותן עכשיו בטלפון ולגלול.</p>
-    <div class="portfolio reveal">
-      <div class="port">
-        <p class="port__name">MAISON - נכסי יוקרה</p>
-        <p class="port__desc">סיור וילה קולנועי, ומעבר "כמו במשחק" בין נכסים.</p>
-        <a href="https://isru-digital.github.io/" target="_blank" rel="noopener">isru-digital.github.io</a>
+        <article class="tier reveal-item">
+          <p class="tier__name">הפקה מלאה</p>
+          <p class="tier__for">כמה חדרים/מוצרים באותו אתר + סרטון שיווקי נפרד לרשתות.</p>
+          <p class="tier__price">16,000 - 28,000 ₪</p>
+          <hr>
+          <ul>
+            <li>כל מה שבחבילה האמצעית</li>
+            <li>כמה סצנות/וריאציות באותו אתר</li>
+            <li>סרטון שיווקי מוכן לרשתות</li>
+            <li>חיבור למערכת ניהול תוכן</li>
+            <li>ליווי צמוד עד עלייה לאוויר</li>
+          </ul>
+        </article>
       </div>
-      <div class="port">
-        <p class="port__name">הילה HALO</p>
-        <p class="port__desc">תכשיטי יוקרה, עם אפשרות "להחליף" זהב בלייב על אותה טבעת.</p>
-        <a href="https://isru-digital.github.io/halo-jewelry/" target="_blank" rel="noopener">isru-digital.github.io/halo-jewelry</a>
-      </div>
-      <div class="port">
-        <p class="port__name">OPTIKA FOCUS</p>
-        <p class="port__desc">אתר דמו לאופטיקה, עם אפקט מעבר מטושטש לחד תוך כדי גלילה.</p>
-        <a href="https://isru-digital.github.io/focus-optika/" target="_blank" rel="noopener">isru-digital.github.io/focus-optika</a>
-      </div>
-    </div>
-  </div>
-</section>
 
-<section class="faq-section">
-  <div class="wrap">
-    <p class="kicker reveal">שאלות שכל לקוח שואל</p>
-    <h2 class="reveal">בלי טכני, בפשטות</h2>
+      <div class="addons">
+        <span class="addon"><b>+1,500-2,500 ₪</b> סצנה נוספת</span>
+        <span class="addon"><b>+2,000-3,500 ₪</b> סרטון שיווקי לרשתות</span>
+        <span class="addon"><b>500-1,000 ₪ לחודש</b> עדכונים ותחזוקה</span>
+      </div>
+    </section>
 
-    <div class="faq reveal">
-      <div class="faq-item">
-        <p class="faq-q">אני צריך לצלם משהו בעצמי?</p>
-        <p class="faq-a">לא. הסרט מופק כולו בבינה מלאכותית לפי סגנון, מותג וצבעים שנקבע יחד. אם יש תמונות מוצר אמיתיות שתרצו לשלב, אפשר בהחלט.</p>
+    <!-- PORTFOLIO -->
+    <section class="portfolio" id="portfolio">
+      <div class="section-head">
+        <p class="eyebrow">כדי שלא תצטרכו לדמיין</p>
+        <h2 class="section-title">דוגמאות חיות - פתחו עכשיו בטלפון</h2>
       </div>
-      <div class="faq-item">
-        <p class="faq-q">כמה זמן זה לוקח מרגע שסיכמנו?</p>
-        <p class="faq-a">בחבילה האמצעית - בדרך כלל כמה ימי עבודה, לא שבועות. זה אחד היתרונות הגדולים מול הפקת סרטון קלאסית.</p>
+      <div class="portfolio__grid">
+        <a class="port reveal-item" href="https://isru-digital.github.io/" target="_blank" rel="noopener">
+          <p class="port__name">MAISON - נכסי יוקרה</p>
+          <p class="port__desc">סיור וילה קולנועי, ומעבר "כמו במשחק" בין נכסים.</p>
+          <span class="port__link">isru-digital.github.io</span>
+        </a>
+        <a class="port reveal-item" href="https://isru-digital.github.io/halo-jewelry/" target="_blank" rel="noopener">
+          <p class="port__name">הילה HALO - תכשיטים</p>
+          <p class="port__desc">סרט תכשיטים + החלפת סוג זהב בלייב על אותה טבעת.</p>
+          <span class="port__link">isru-digital.github.io/halo-jewelry</span>
+        </a>
+        <a class="port reveal-item" href="https://isru-digital.github.io/focus-optika/" target="_blank" rel="noopener">
+          <p class="port__name">OPTIKA FOCUS - אופטיקה</p>
+          <p class="port__desc">אפקט עדשה - העולם עובר מטושטש לחד תוך כדי גלילה.</p>
+          <span class="port__link">isru-digital.github.io/focus-optika</span>
+        </a>
       </div>
-      <div class="faq-item">
-        <p class="faq-q">זה עובד טוב בנייד?</p>
-        <p class="faq-a">כן, ומכוון. בונים גרסה נפרדת שמותאמת לפרופורציות של מסך טלפון, לא רק מקטינים את גרסת המחשב.</p>
-      </div>
-      <div class="faq-item">
-        <p class="faq-q">מה אם אני רוצה לשנות משהו אחרי שהאתר עלה?</p>
-        <p class="faq-a">סבב תיקונים אחד כלול במחיר. מעבר לכך, או לעדכונים שוטפים בהמשך, יש אפשרות לריטיינר חודשי קטן.</p>
-      </div>
-      <div class="faq-item">
-        <p class="faq-q">למה זה יקר יותר מאתר רגיל בוויקס?</p>
-        <p class="faq-a">כי זו לא רק בניית אתר - זו גם הפקת סרט מותאם אישית שאף מותג מתחרה לא ישתמש בו. זה משלב עבודה של סטודיו וידאו ועיצוב אתרים באותו מחיר.</p>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<footer>
-  <div class="wrap">
-    <p class="mark">ISRU</p>
-    <p class="contact">052-744-4984 &nbsp;·&nbsp; <a href="mailto:info@isru.co.il">info@isru.co.il</a></p>
-    <p class="fine">המחירים הם טווח מוצע, מותאמים סופית להיקף ולדרישות של כל פרויקט</p>
-  </div>
-</footer>
+    <!-- FAQ -->
+    <section class="faq" id="faq">
+      <div class="section-head">
+        <p class="eyebrow">שאלות שכל לקוח שואל</p>
+        <h2 class="section-title">בפשטות, בלי טכני</h2>
+      </div>
+      <div class="faq__list">
+        <div class="faq__item reveal-item">
+          <p class="faq__q">אני צריך לצלם משהו בעצמי?</p>
+          <p class="faq__a">לא. הסרט מופק כולו בבינה מלאכותית לפי סגנון ומותג שנקבע יחד. אפשר בהחלט לשלב גם תמונות אמיתיות שלכם.</p>
+        </div>
+        <div class="faq__item reveal-item">
+          <p class="faq__q">כמה זמן זה לוקח?</p>
+          <p class="faq__a">בחבילה האמצעית - בדרך כלל כמה ימי עבודה, לא שבועות. יתרון ענק מול הפקת וידאו קלאסית.</p>
+        </div>
+        <div class="faq__item reveal-item">
+          <p class="faq__q">זה עובד טוב בנייד?</p>
+          <p class="faq__a">כן, ומכוון. בונים גרסת סרט נפרדת לפרופורציות של מסך טלפון - בדיוק כמו בדף הזה.</p>
+        </div>
+        <div class="faq__item reveal-item">
+          <p class="faq__q">מה אם ארצה לשנות משהו אחרי העלייה לאוויר?</p>
+          <p class="faq__a">סבב תיקונים כלול במחיר. לעדכונים שוטפים בהמשך יש ריטיינר חודשי קטן.</p>
+        </div>
+        <div class="faq__item reveal-item">
+          <p class="faq__q">למה זה יקר יותר מאתר וויקס?</p>
+          <p class="faq__a">כי זו לא רק בניית אתר - זו גם הפקת סרט מותאם אישית שאף מתחרה לא ישתמש בו. סטודיו וידאו ועיצוב אתרים באותו מחיר.</p>
+        </div>
+      </div>
+    </section>
 
-<script>
-  (function(){
-    var fill = document.getElementById('progressFill');
-    function onScroll(){
-      var h = document.documentElement;
-      var scrolled = h.scrollTop;
-      var max = h.scrollHeight - h.clientHeight;
-      var pct = max > 0 ? (scrolled / max) * 100 : 0;
-      fill.style.width = pct + '%';
-    }
-    document.addEventListener('scroll', onScroll, {passive:true});
-    onScroll();
+    <footer class="footer">
+      <div class="footer__brand">
+        <span class="footer__main">ISRU</span>
+        <span class="footer__sub">בניית אתרי יוקרה</span>
+      </div>
+      <div class="footer__cta">
+        <a class="btn btn--gold btn--lg" href="https://wa.me/972527444984?text=%D7%94%D7%99%D7%99%2C%20%D7%A8%D7%90%D7%99%D7%AA%D7%99%20%D7%90%D7%AA%20%D7%94%D7%90%D7%AA%D7%A8%20%D7%A9%D7%9C%D7%9B%D7%9D%20%D7%95%D7%90%D7%A0%D7%99%20%D7%A8%D7%95%D7%A6%D7%94%20%D7%90%D7%AA%D7%A8%20%D7%9B%D7%96%D7%94" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          052-744-4984
+        </a>
+        <a class="footer__mail" href="mailto:info@isru.co.il">info@isru.co.il</a>
+      </div>
+      <p class="footer__legal">המחירים הם טווח מוצע, מותאמים סופית להיקף של כל פרויקט. © 2026 ISRU</p>
+    </footer>
 
-    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var items = document.querySelectorAll('.reveal');
-    if (reduced || !('IntersectionObserver' in window)) {
-      items.forEach(function(el){ el.classList.add('in-view'); });
-    } else {
-      var io = new IntersectionObserver(function(entries){
-        entries.forEach(function(entry){
-          if (entry.isIntersecting) {
-            entry.target.classList.add('in-view');
-            io.unobserve(entry.target);
-          }
-        });
-      }, {threshold: 0.15});
-      items.forEach(function(el){ io.observe(el); });
-    }
-  })();
-</script>
+  </main>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

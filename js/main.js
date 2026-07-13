@@ -127,12 +127,15 @@
     requestSeek(p * dur());
   }
 
+  var waFloat = document.getElementById("waFloat");
   function onScroll() {
     update();
     var st = window.scrollY || window.pageYOffset;
     var h = document.documentElement.scrollHeight - window.innerHeight;
     if (pbar) pbar.style.transform = "scaleX(" + (h > 0 ? st / h : 0) + ")";
     if (nav) nav.classList.toggle("is-scrolled", st > 40);
+    /* reveal the floating WhatsApp once past the first screen of the film */
+    if (waFloat) waFloat.classList.toggle("is-in", st > window.innerHeight * 0.9);
     runReveals();
   }
   window.addEventListener("scroll", onScroll, { passive: true });

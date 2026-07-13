@@ -265,15 +265,15 @@ html.js .loader.is-hidden { opacity: 0; visibility: hidden; pointer-events: none
   object-fit: cover;
   z-index: 0;
   background: #000;
-  filter: brightness(0.82) saturate(1.04) contrast(1.03);
+  filter: brightness(0.74) saturate(1.05) contrast(1.04);
 }
 .film__scrim {
   position: absolute;
   inset: 0;
   z-index: 1;
   background:
-    linear-gradient(180deg, rgba(10,8,5,0.55) 0%, rgba(10,8,5,0.10) 30%,
-                    rgba(10,8,5,0.24) 64%, rgba(10,8,5,0.8) 100%);
+    linear-gradient(180deg, rgba(10,8,5,0.62) 0%, rgba(10,8,5,0.20) 32%,
+                    rgba(10,8,5,0.34) 64%, rgba(10,8,5,0.85) 100%);
 }
 
 .caps { position: absolute; inset: 0; z-index: 2; }
@@ -289,7 +289,18 @@ html.js .loader.is-hidden { opacity: 0; visibility: hidden; pointer-events: none
 }
 .cap.is-active { opacity: 1; pointer-events: auto; }
 .cap__inner { width: 100%; max-width: var(--maxw); margin: 0 auto; }
-.cap__text { max-width: 620px; }
+.cap__text { max-width: 620px; position: relative; }
+/* soft dark readability plate that hugs the text, so white copy stays legible
+   over any frame (incl. the bright studio screen) without looking like a box */
+.cap__text::before {
+  content: "";
+  position: absolute;
+  inset: -32px -40px;
+  z-index: -1;
+  background: radial-gradient(120% 120% at 50% 50%, rgba(8,6,4,0.62) 0%, rgba(8,6,4,0.42) 45%, rgba(8,6,4,0) 78%);
+  filter: blur(6px);
+  pointer-events: none;
+}
 .cap--center { text-align: center; }
 .cap--center .cap__text { max-width: 880px; margin: 0 auto; }
 .cap--center .scene__body,
@@ -299,47 +310,56 @@ html.js .loader.is-hidden { opacity: 0; visibility: hidden; pointer-events: none
 
 /* ---------- typography ---------- */
 .eyebrow {
-  font-size: 0.82rem;
-  font-weight: 600;
+  font-size: 0.84rem;
+  font-weight: 700;
   letter-spacing: 0.12em;
   color: var(--gold);
   margin-bottom: 1.1rem;
+}
+/* caption eyebrows sit over video - brighter gold + heavy shadow for legibility */
+.cap .eyebrow {
+  font-size: 0.92rem;
+  color: var(--gold-2);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.9), 0 2px 14px rgba(0,0,0,0.65);
 }
 
 .hero__title {
   font-family: var(--display);
   font-weight: 900;
-  font-size: clamp(3rem, 11vw, 8.5rem);
+  font-size: clamp(3.2rem, 11.5vw, 9rem);
   line-height: 1.02;
-  color: var(--ink);
-  text-shadow: 0 2px 40px rgba(0,0,0,0.65), 0 0 90px rgba(201,162,75,0.18);
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.9), 0 3px 18px rgba(0,0,0,0.75), 0 0 90px rgba(201,162,75,0.2);
   text-wrap: balance;
 }
 .hero__tagline {
-  font-size: clamp(1.05rem, 2vw, 1.35rem);
-  color: var(--ink-dim);
+  font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+  font-weight: 600;
+  color: #fff;
   max-width: 36ch;
   margin-top: 1.5rem;
   margin-bottom: 2.2rem;
-  text-shadow: 0 1px 14px rgba(0,0,0,0.7);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.9), 0 2px 16px rgba(0,0,0,0.8);
 }
 
 .scene__title {
   font-family: var(--display);
   font-weight: 900;
-  font-size: clamp(2.4rem, 7.5vw, 5.8rem);
+  font-size: clamp(2.6rem, 7.8vw, 6rem);
   line-height: 1.05;
-  text-shadow: 0 2px 36px rgba(0,0,0,0.75);
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.9), 0 3px 20px rgba(0,0,0,0.8);
   text-wrap: balance;
 }
-.scene__title--xl { font-size: clamp(2.8rem, 9.5vw, 7.5rem); }
+.scene__title--xl { font-size: clamp(2.9rem, 9.8vw, 7.5rem); }
 .scene__body {
-  font-size: clamp(1.02rem, 1.5vw, 1.26rem);
-  line-height: 1.65;
-  color: var(--ink-dim);
+  font-size: clamp(1.1rem, 1.7vw, 1.34rem);
+  font-weight: 600;
+  line-height: 1.62;
+  color: #fff;
   max-width: 46ch;
   margin-top: 1.2rem;
-  text-shadow: 0 1px 12px rgba(0,0,0,0.65);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.9), 0 2px 16px rgba(0,0,0,0.8);
 }
 .cta__actions {
   display: flex;

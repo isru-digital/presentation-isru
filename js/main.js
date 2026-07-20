@@ -178,4 +178,90 @@
   document.querySelectorAll("[data-link]").forEach(function (a) {
     a.addEventListener("click", function () { if (nav) nav.classList.remove("is-open"); });
   });
+
+  /* ---------- project builder ----------
+     Replaces static price tiers: visitor picks industry + scope (+ optional
+     extras), gets a personalized summary and a pre-filled WhatsApp message.
+     No numbers shown anywhere - the whole point is to start a conversation. */
+  var wizIndustry = document.getElementById("wizIndustry");
+  var wizScope = document.getElementById("wizScope");
+  var wizExtras = document.getElementById("wizExtras");
+  if (wizIndustry && wizScope) {
+    var WA_NUMBER = "972527444984";
+    var wizState = { industry: null, scope: null, extras: [] };
+
+    var wizEmpty = document.getElementById("wizEmpty");
+    var wizFilled = document.getElementById("wizFilled");
+    var wizSummary = document.getElementById("wizSummary");
+    var wizCta = document.getElementById("wizCta");
+
+    function wizSelectSingle(group, chosen) {
+      Array.prototype.slice.call(group.querySelectorAll("[data-value]")).forEach(function (b) {
+        var active = b === chosen;
+        b.classList.toggle("is-active", active);
+        b.setAttribute("aria-pressed", String(active));
+      });
+    }
+    function wizToggleMulti(btn) {
+      var v = btn.dataset.value;
+      var active = btn.classList.toggle("is-active");
+      btn.setAttribute("aria-pressed", String(active));
+      if (active) {
+        if (wizState.extras.indexOf(v) === -1) wizState.extras.push(v);
+      } else {
+        wizState.extras = wizState.extras.filter(function (x) { return x !== v; });
+      }
+    }
+
+    wizIndustry.addEventListener("click", function (e) {
+      var btn = e.target.closest("[data-value]");
+      if (!btn) return;
+      wizState.industry = btn.dataset.value;
+      wizSelectSingle(wizIndustry, btn);
+      wizRender();
+    });
+    wizScope.addEventListener("click", function (e) {
+      var btn = e.target.closest("[data-value]");
+      if (!btn) return;
+      wizState.scope = btn.dataset.value;
+      wizSelectSingle(wizScope, btn);
+      wizRender();
+    });
+    if (wizExtras) {
+      wizExtras.addEventListener("click", function (e) {
+        var btn = e.target.closest("[data-value]");
+        if (!btn) return;
+        wizToggleMulti(btn);
+        wizRender();
+      });
+    }
+
+    function wizRender() {
+      if (!wizState.industry || !wizState.scope) {
+        if (wizEmpty) wizEmpty.hidden = false;
+        if (wizFilled) wizFilled.hidden = true;
+        return;
+      }
+      if (wizEmpty) wizEmpty.hidden = true;
+      if (wizFilled) wizFilled.hidden = false;
+
+      var extrasLine = wizState.extras.length ? ", עם " + wizState.extras.join(" + ") : "";
+      if (wizSummary) {
+        wizSummary.innerHTML =
+          "סרט קולנועי לעסק בתחום <b>" + wizState.industry + "</b>, " +
+          "בהיקף <b>" + wizState.scope + "</b>" + extrasLine + ".";
+      }
+      var lines = [
+        "היי, מילאתי את הטופס באתר.",
+        "תחום: " + wizState.industry,
+        "היקף: " + wizState.scope
+      ];
+      if (wizState.extras.length) lines.push("תוספות: " + wizState.extras.join(", "));
+      lines.push("אשמח להצעת מחיר מדויקת.");
+      var msg = lines.join("\n");
+      if (wizCta) wizCta.href = "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(msg);
+    }
+
+    wizRender();
+  }
 })();

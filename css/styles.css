@@ -435,7 +435,7 @@ html.js .loader.is-hidden { opacity: 0; visibility: hidden; pointer-events: none
 }
 
 /* ---------- sections shared ---------- */
-.explain, .pricing, .portfolio, .faq {
+.explain, .builder, .portfolio, .faq {
   padding: clamp(80px, 12vh, 150px) clamp(24px, 5vw, 64px);
   border-top: 1px solid var(--line);
 }
@@ -444,7 +444,7 @@ html.js .loader.is-hidden { opacity: 0; visibility: hidden; pointer-events: none
     radial-gradient(120% 80% at 50% 0%, rgba(201,162,75,0.07), transparent 60%),
     var(--bg-2);
 }
-.pricing { background: var(--bg); }
+.builder { background: var(--bg); }
 .portfolio { background: var(--bg-2); }
 .faq { background: var(--bg); }
 
@@ -507,89 +507,133 @@ html.js .loader.is-hidden { opacity: 0; visibility: hidden; pointer-events: none
 .compare__table .t-gold { color: var(--gold-2); }
 .compare__table .th-gold { color: var(--gold-2); }
 
-/* ---------- pricing ---------- */
-.tiers {
-  max-width: var(--maxw);
-  margin: 0 auto;
+/* ---------- builder wizard (replaces static price tiers) ---------- */
+.wiz { max-width: var(--maxw); margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+
+.wiz__label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.16rem;
+  color: var(--ink);
+  margin-bottom: 18px;
+}
+.wiz__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--gold);
+  color: var(--gold-2);
+  font-family: var(--body);
+  font-weight: 700;
+  font-size: 0.85rem;
+  flex: 0 0 auto;
+}
+.wiz__optional {
+  font-family: var(--body);
+  font-weight: 400;
+  font-size: 0.82rem;
+  color: var(--bronze);
+}
+
+/* chip choices - industry (single-select) + extras (multi-select) */
+.wiz__chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip {
+  font-family: var(--body);
+  font-weight: 600;
+  font-size: 0.94rem;
+  padding: 12px 22px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,0.02);
+  color: var(--ink-dim);
+  cursor: pointer;
+  transition: border-color 0.3s var(--ease), color 0.3s var(--ease), background 0.3s var(--ease), transform 0.2s var(--ease);
+}
+.chip:hover { border-color: rgba(201,162,75,0.5); color: var(--ink); }
+.chip:active { transform: scale(0.97); }
+.chip.is-active {
+  border-color: var(--gold);
+  color: #1c1408;
+  background: linear-gradient(135deg, var(--gold), var(--gold-2));
+  box-shadow: 0 6px 18px rgba(201,162,75,0.32);
+}
+
+/* scope cards - single-select, same visual weight as the old price tiers */
+.wiz__scope {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  gap: 18px;
   align-items: stretch;
 }
-.tier {
+.scope {
+  text-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.008));
   border: 1px solid var(--line);
   border-radius: 4px;
-  padding: 32px 26px;
+  padding: 26px 24px;
   position: relative;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.35s var(--ease), border-color 0.35s var(--ease);
+  cursor: pointer;
+  font-family: var(--body);
+  transition: transform 0.35s var(--ease), border-color 0.35s var(--ease), background 0.35s var(--ease);
 }
-.tier:hover { transform: translateY(-5px); border-color: rgba(201,162,75,0.55); }
-.tier--featured {
+.scope:hover { transform: translateY(-4px); border-color: rgba(201,162,75,0.5); }
+.scope.is-active {
   border-color: var(--gold);
   box-shadow: 0 0 0 1px var(--gold), 0 24px 60px -30px rgba(201,162,75,0.5);
-  background: linear-gradient(180deg, rgba(201,162,75,0.09), rgba(255,255,255,0.01));
+  background: linear-gradient(180deg, rgba(201,162,75,0.12), rgba(255,255,255,0.01));
 }
-.tier__badge {
+.scope__badge {
   position: absolute;
-  top: -13px; inset-inline-start: 26px;
+  top: -13px; inset-inline-start: 24px;
   background: linear-gradient(135deg, var(--gold), var(--gold-2));
   color: #1c1408;
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   font-weight: 700;
   padding: 5px 14px;
   border-radius: 2px;
 }
-.tier__name {
+.scope__name {
   font-family: var(--display);
   font-weight: 700;
-  font-size: 1.4rem;
+  font-size: 1.28rem;
   color: var(--ink);
-  margin: 6px 0;
 }
-.tier__for { color: var(--bronze); font-size: 0.92rem; margin-bottom: 18px; min-height: 44px; }
-.tier__price {
-  font-family: var(--display);
-  font-weight: 700;
-  color: var(--gold-2);
-  font-size: 1.7rem;
-  font-variant-numeric: tabular-nums;
-}
-.tier hr { border: none; border-top: 1px solid var(--line); margin: 20px 0; }
-.tier ul { list-style: none; flex: 1; }
-.tier li {
-  font-size: 0.95rem;
-  color: var(--ink-dim);
-  padding-inline-start: 20px;
-  position: relative;
-  margin-bottom: 12px;
-}
-.tier li::before {
-  content: "-";
-  position: absolute;
-  inset-inline-start: 0;
-  color: var(--gold);
-}
+.scope.is-active .scope__name { color: var(--gold-2); }
+.scope__desc { color: var(--bronze); font-size: 0.92rem; line-height: 1.6; }
 
-.addons {
-  max-width: var(--maxw);
-  margin: 36px auto 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  justify-content: center;
-}
-.addon {
+/* result panel - fills in once industry + scope are chosen, no numbers, just a WhatsApp handoff */
+.wiz__result {
   border: 1px solid var(--line);
-  border-radius: 3px;
-  padding: 10px 16px;
-  font-size: 0.88rem;
-  color: var(--bronze);
-  white-space: nowrap;
+  border-radius: 6px;
+  padding: 34px clamp(22px, 4vw, 44px);
+  background: linear-gradient(180deg, rgba(201,162,75,0.06), rgba(255,255,255,0.008));
+  text-align: center;
 }
-.addon b { color: var(--ink); font-weight: 700; }
+.wiz__result-empty { color: var(--bronze); font-size: 1rem; }
+.wiz__result-filled { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.wiz__result-label {
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  color: var(--gold);
+  font-weight: 700;
+}
+.wiz__summary {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(1.05rem, 2.4vw, 1.4rem);
+  color: var(--ink);
+  max-width: 62ch;
+  line-height: 1.55;
+}
+.wiz__summary b { color: var(--gold-2); font-weight: 700; }
 
 /* ---------- portfolio ---------- */
 .portfolio__grid {
@@ -665,23 +709,6 @@ html.js .loader.is-hidden { opacity: 0; visibility: hidden; pointer-events: none
 }
 .faq__a { color: var(--bronze); font-size: 0.98rem; max-width: 66ch; }
 
-/* ---------- pricing CTA ---------- */
-.pricing__cta {
-  max-width: var(--maxw);
-  margin: 44px auto 0;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-}
-.pricing__cta-line {
-  font-family: var(--display);
-  font-weight: 500;
-  font-size: clamp(1.1rem, 2.4vw, 1.5rem);
-  color: var(--ink);
-}
-
 /* ---------- floating WhatsApp ---------- */
 .wa-float {
   position: fixed;
@@ -751,8 +778,6 @@ html.js .loader.is-hidden { opacity: 0; visibility: hidden; pointer-events: none
   transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
 }
 .reveal-on .reveal-item.is-in { opacity: 1; transform: none; }
-.tiers .tier:nth-child(2) { transition-delay: 0.07s; }
-.tiers .tier:nth-child(3) { transition-delay: 0.14s; }
 .portfolio__grid .port:nth-child(2) { transition-delay: 0.07s; }
 .portfolio__grid .port:nth-child(3) { transition-delay: 0.14s; }
 .explain__grid .xcard:nth-child(2) { transition-delay: 0.07s; }
@@ -780,9 +805,10 @@ html.js .loader.is-hidden { opacity: 0; visibility: hidden; pointer-events: none
   .nav__links > a:not(.btn) { padding: 12px 0; font-size: 1rem; width: 100%; }
   .nav__links .btn { margin-top: 10px; width: 100%; }
 
-  .explain__grid, .tiers, .portfolio__grid { grid-template-columns: 1fr; }
-  .tier__for { min-height: 0; }
-  .tier--featured { order: -1; }
+  .explain__grid, .wiz__scope, .portfolio__grid { grid-template-columns: 1fr; }
+  .scope--featured { order: -1; }
+  .wiz__chips { gap: 8px; }
+  .chip { padding: 10px 18px; font-size: 0.88rem; }
 
   /* comparison table -> stacked cards so the gold column is never off-screen */
   .compare { overflow-x: visible; }
@@ -825,9 +851,8 @@ html.js .loader.is-hidden { opacity: 0; visibility: hidden; pointer-events: none
 }
 
 @media (min-width: 861px) and (max-width: 1040px) {
-  .tiers { grid-template-columns: 1fr; max-width: 640px; }
-  .tier--featured { order: -1; }
-  .tier__for { min-height: 0; }
+  .wiz__scope { grid-template-columns: 1fr; max-width: 640px; margin-inline: auto; }
+  .scope--featured { order: -1; }
   .portfolio__grid { grid-template-columns: repeat(3, 1fr); }
 }
 
@@ -843,7 +868,7 @@ html.js .loader.is-hidden { opacity: 0; visibility: hidden; pointer-events: none
   .scroll-cue__line::after { animation: none; }
   .loader__line::after { animation: none; }
   .loader__brand, .loader__sub { animation: none; }
-  .cap, .progress, .nav, .btn, .tier, .port, .xcard, .dots a { transition: none; }
+  .cap, .progress, .nav, .btn, .scope, .chip, .port, .xcard, .dots a { transition: none; }
   .reveal-on .reveal-item { opacity: 1; transform: none; transition: none; }
   .wa-float__pulse { animation: none; }
   .port:hover .port__media img { transform: none; }
